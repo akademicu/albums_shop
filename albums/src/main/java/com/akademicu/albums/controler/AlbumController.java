@@ -5,9 +5,10 @@ import com.akademicu.albums.service.serviceImpl.AlbumServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/api/")
 public class AlbumController {
 
@@ -23,4 +24,16 @@ public class AlbumController {
     }
 
 
+    @GetMapping("/home")
+    public String handelWelcomePage(){
+        return "home";
+    }
+    @GetMapping("/user/home")
+    public String handelUserPage(){
+        return "user_home";
+    }
+    @GetMapping("/admin/home")
+    public String handelAdminPage(){
+        return "admin_home";
+    }
 }
