@@ -1,5 +1,6 @@
 package com.akademicu.albums.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class Band {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "band", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    @OneToMany(mappedBy = "band", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Album> albumList;
 }

@@ -21,12 +21,13 @@ public class Album {
     @Column(nullable = false)
     private int nrOfCopies;
 
-    @ManyToOne
-    @JoinColumn(name = "band_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "band_id", nullable = false)
     private Band band;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "genre_album_mapping", joinColumns = @JoinColumn(name = "album_id"),
-                        inverseJoinColumns = @JoinColumn(name = "genre_id"))
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genreList;
+
 }

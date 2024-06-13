@@ -1,6 +1,8 @@
 package com.akademicu.albums.controller;
 
+import com.akademicu.albums.dto.AlbumDto;
 import com.akademicu.albums.models.Album;
+import com.akademicu.albums.service.serviceImpl.AlbumService;
 import com.akademicu.albums.service.serviceImpl.serviceImpl.AlbumServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,9 @@ import java.util.List;
 @RequestMapping("/albums")
 public class AlbumController {
 
-    private final AlbumServiceImpl albumService;
+    private final AlbumService albumService;
     @Autowired
-    public AlbumController(AlbumServiceImpl albumService) {
+    public AlbumController(AlbumService albumService) {
         this.albumService = albumService;
     }
 
@@ -25,6 +27,8 @@ public class AlbumController {
     @GetMapping("/all")
     public ResponseEntity<List<Album>> allAlbums(){
         List<Album> albumList = albumService.getAllAlbums();
+
         return new ResponseEntity<>(albumList, HttpStatus.OK);
     }
+
 }
