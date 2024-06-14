@@ -22,6 +22,6 @@ public class Band {
     private String name;
 
 
-    @OneToMany(mappedBy = "band", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "band", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albumList = new ArrayList<>();
 }

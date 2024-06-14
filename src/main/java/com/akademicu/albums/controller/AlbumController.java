@@ -1,6 +1,7 @@
 package com.akademicu.albums.controller;
 
 import com.akademicu.albums.dto.AlbumDto;
+import com.akademicu.albums.exception.AlbumNotFoundExceptionClass;
 import com.akademicu.albums.models.Album;
 import com.akademicu.albums.models.Genre;
 import com.akademicu.albums.service.serviceImpl.serviceImpl.AlbumServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/albums")
@@ -50,6 +52,13 @@ public class AlbumController {
     public ResponseEntity<List<Album>> getAlbumsByBandController(@PathVariable String bandName){
         List<Album> albumList = albumService.getAlbumByBandName(bandName);
         return new ResponseEntity<>(albumList, HttpStatus.OK);
+    }
+
+    @DeleteMapping(params = "albumName")
+    public ResponseEntity<String> deleteAlbumByNameController(@RequestParam String albumName){
+        Album album = albumService.getAlbumByName(albumName);
+        albumService.deleteAlbumByName(albumName);
+        return new ResponseEntity<>("The album "+albumName+" have been deleted", HttpStatus.OK);
     }
 
 }

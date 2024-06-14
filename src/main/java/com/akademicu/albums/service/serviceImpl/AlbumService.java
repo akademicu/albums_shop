@@ -11,4 +11,5 @@ public interface AlbumService {
     Album getAlbumByName(String albumName);
     List<Album> getAlbumsByGenre(String genreName);
     List<Album> getAlbumByBandName(String bandName);
+    void deleteAlbumByName(String albumName);
 }

@@ -17,4 +17,5 @@ public interface AlbumRepository extends JpaRepository<Album,Long> {
 
     @Query(value = "SELECT * FROM album WHERE band_id=:bandId", nativeQuery = true)
     List<Album> getAlbumsByBand(@Param("bandId") Long bandId);
+
 }

@@ -78,6 +78,13 @@ public class AlbumServiceImpl implements AlbumService {
         return albumList;
     }
 
+    @Override
+    public void deleteAlbumByName(String albumName) {
+        Album album = albumRepository.findByName(albumName);
+        if (Objects.isNull(album)) throw new AlbumNotFoundExceptionClass("album not found");
+        albumRepository.deleteById(album.getId());
+    }
+
     ///Helping functions
     private Album mapToEntity(AlbumDto albumDto){
         Album album = new Album();
