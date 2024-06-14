@@ -1,8 +1,10 @@
 package com.akademicu.albums.service.serviceImpl.serviceImpl;
 
 import com.akademicu.albums.dto.AlbumDto;
+import com.akademicu.albums.exception.AlbumNotFoundExceptionClass;
 import com.akademicu.albums.models.Album;
 import com.akademicu.albums.models.Band;
+import com.akademicu.albums.models.Genre;
 import com.akademicu.albums.repository.AlbumRepository;
 import com.akademicu.albums.service.serviceImpl.AlbumService;
 import com.akademicu.albums.service.serviceImpl.BandService;
@@ -53,6 +55,17 @@ public class AlbumServiceImpl implements AlbumService {
         album = albumRepository.findByName(albumName);
         if (Objects.isNull(album)) throw new RuntimeException("No search album");
         return album;
+    }
+
+    @Override
+    public List<Album> getAlbumsByGenre(String genreName) {
+        Genre genre = genreService.genreByName(genreName);
+        if (Objects.isNull(genre)) throw new AlbumNotFoundExceptionClass("no such genre");
+        Long genreId = genre.getId();
+        List<Album> albumList = new ArrayList<>();
+        albumRepository.getAlbumsByGenre(genreId).forEach(albumList::add);
+        if (albumList.isEmpty()) throw new AlbumNotFoundExceptionClass("no albums with such genre");
+        return albumList;
     }
 
     ///Helping functions

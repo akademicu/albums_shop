@@ -2,6 +2,7 @@ package com.akademicu.albums.controller;
 
 import com.akademicu.albums.dto.AlbumDto;
 import com.akademicu.albums.models.Album;
+import com.akademicu.albums.models.Genre;
 import com.akademicu.albums.service.serviceImpl.serviceImpl.AlbumServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,6 @@ public class AlbumController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Album>> getAllAlbumsController(){
-        System.out.println("\nalbumController");
         List<Album> albumList = albumService.getAllAlbums();
         return new ResponseEntity<>(albumList, HttpStatus.OK);
     }
@@ -34,10 +34,16 @@ public class AlbumController {
         return new ResponseEntity<>(album, HttpStatus.CREATED);
     }
 
-    @GetMapping("/album/{name}")
-    public ResponseEntity<Album> getAlbumByNameController(@PathVariable String name){
-        Album album = albumService.getAlbumByName(name);
+    @GetMapping("/album/{albumName}")
+    public ResponseEntity<Album> getAlbumByNameController(@PathVariable String albumName){
+        Album album = albumService.getAlbumByName(albumName);
         return new ResponseEntity<>(album, HttpStatus.OK);
+    }
+
+    @GetMapping("/{genreName}")
+    public ResponseEntity<List<Album>> getAllAlbumsByGeneController(@PathVariable String genreName){
+        List<Album> albumList = albumService.getAlbumsByGenre(genreName);
+        return new ResponseEntity<>(albumList, HttpStatus.OK);
     }
 
 }
