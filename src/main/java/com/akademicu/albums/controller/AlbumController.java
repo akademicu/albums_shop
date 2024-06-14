@@ -40,9 +40,15 @@ public class AlbumController {
         return new ResponseEntity<>(album, HttpStatus.OK);
     }
 
-    @GetMapping("/{genreName}")
+    @GetMapping("/genre/{genreName}")
     public ResponseEntity<List<Album>> getAllAlbumsByGeneController(@PathVariable String genreName){
         List<Album> albumList = albumService.getAlbumsByGenre(genreName);
+        return new ResponseEntity<>(albumList, HttpStatus.OK);
+    }
+
+    @GetMapping("/band/{bandName}")
+    public ResponseEntity<List<Album>> getAlbumsByBandController(@PathVariable String bandName){
+        List<Album> albumList = albumService.getAlbumByBandName(bandName);
         return new ResponseEntity<>(albumList, HttpStatus.OK);
     }
 

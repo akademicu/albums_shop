@@ -32,4 +32,8 @@ public class BandServiceImpl implements BandService {
         return band;
     }
 
+    @Override
+    public Band getBandByNameOnly(String bandName) {
+        return bandRepository.findByName(bandName);
+    }
 }

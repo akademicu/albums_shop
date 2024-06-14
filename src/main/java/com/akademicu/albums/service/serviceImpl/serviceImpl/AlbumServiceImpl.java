@@ -68,6 +68,16 @@ public class AlbumServiceImpl implements AlbumService {
         return albumList;
     }
 
+    @Override
+    public List<Album> getAlbumByBandName(String bandName) {
+        Band band = bandService.getBandByNameOnly(bandName);
+        if (Objects.isNull(band))throw new AlbumNotFoundExceptionClass("nu such band");
+        Long bandId = band.getId();
+        List<Album> albumList = new ArrayList<>();
+        albumRepository.getAlbumsByBand(bandId).forEach(albumList::add);
+        return albumList;
+    }
+
     ///Helping functions
     private Album mapToEntity(AlbumDto albumDto){
         Album album = new Album();

@@ -10,4 +10,5 @@ public interface AlbumService {
     Album createAlbumInDb(AlbumDto albumDto);
     Album getAlbumByName(String albumName);
     List<Album> getAlbumsByGenre(String genreName);
+    List<Album> getAlbumByBandName(String bandName);
 }
