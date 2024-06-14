@@ -49,8 +49,8 @@ class AlbumServiceImplTest {
     @DisplayName("GET /albums/all")
     void getAllAlbums() throws Exception {
         List<Album> albums = new ArrayList<>();
-        List<Genre> genreList = List.of(new Genre(1L,"rock"), new Genre(2L, "pop") );
-        albums.add(new Album(1L,"name",1983, 5, "band1", genreList));
+        //List<Genre> genreList = List.of(new Genre(1L,"rock"), new Genre(2L, "pop") );
+        //albums.add(new Album(1L,"name",1983, 5, "band1", genreList));
 
         when(albumService.getAllAlbums()).thenReturn(albums);
 

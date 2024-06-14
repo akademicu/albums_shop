@@ -19,4 +19,20 @@ public class BandServiceImpl implements BandService {
         Optional<Band> band = bandRepository.findById(id);
         return band.orElse(null);
     }
+
+    @Override
+    public Band getBandByName(String bandName) {
+        Band band = bandRepository.findByName(bandName);
+        //System.out.println(band.getName());
+        if (band == null){
+            band = new Band();
+            band.setName(bandName);
+            bandRepository.save(band);
+            System.out.println(band.getName()+"2");
+            band = bandRepository.findByName(bandName);
+            System.out.println(band.getId());
+        }
+        return band;
+    }
+
 }

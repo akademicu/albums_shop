@@ -1,5 +1,6 @@
 package com.akademicu.albums.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -21,6 +22,8 @@ public class Album {
     @Column(nullable = false)
     private int nrOfCopies;
 
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "band_id", nullable = false)
     private Band band;

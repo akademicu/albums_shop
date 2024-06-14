@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class Band {
     @Column(nullable = false)
     private String name;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "band", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Album> albumList;
+    private List<Album> albumList = new ArrayList<>();
 }
