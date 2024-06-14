@@ -5,37 +5,38 @@ import com.akademicu.albums.models.Album;
 import com.akademicu.albums.models.Band;
 import com.akademicu.albums.repository.AlbumRepository;
 import com.akademicu.albums.service.serviceImpl.AlbumService;
+import com.akademicu.albums.service.serviceImpl.BandService;
+import com.akademicu.albums.service.serviceImpl.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
     private final AlbumRepository albumRepository;
-    private final BandServiceImpl bandService;
-    private final GenreServiceImpl genreService;
+    private final BandService bandService;
+    private final GenreService genreService;
+
     @Autowired
-    public AlbumServiceImpl(AlbumRepository albumRepository, BandServiceImpl bandService, GenreServiceImpl genreService) {
+    public AlbumServiceImpl(AlbumRepository albumRepository, BandService bandService, GenreService genreService) {
         this.albumRepository = albumRepository;
         this.bandService = bandService;
         this.genreService = genreService;
     }
-
+    //get all albums
     @Override
     public List<Album> getAllAlbums() {
         List<Album> albums = new ArrayList<>();
-        //System.out.println("\nalbum Service");
         albumRepository.findAll().forEach(albums::add);
         System.out.println(albums.getFirst());
-
         if (albums.isEmpty())throw new RuntimeException("no albums in db");
         return albums;
     }
-
-
+    //Create album
     @Override
     public Album createAlbumInDb(AlbumDto albumDto) {
         Album album = new Album();
@@ -44,6 +45,17 @@ public class AlbumServiceImpl implements AlbumService {
         return album;
     }
 
+
+
+    @Override
+    public Album getAlbumByName(String albumName) {
+        Album album = new Album();
+        album = albumRepository.findByName(albumName);
+        if (Objects.isNull(album)) throw new RuntimeException("No search album");
+        return album;
+    }
+
+    ///Helping functions
     private Album mapToEntity(AlbumDto albumDto){
         Album album = new Album();
         album.setName(albumDto.name());
