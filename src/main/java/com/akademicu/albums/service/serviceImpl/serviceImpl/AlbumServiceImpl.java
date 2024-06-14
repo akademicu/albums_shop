@@ -5,8 +5,6 @@ import com.akademicu.albums.models.Album;
 import com.akademicu.albums.models.Band;
 import com.akademicu.albums.repository.AlbumRepository;
 import com.akademicu.albums.service.serviceImpl.AlbumService;
-import com.akademicu.albums.service.serviceImpl.BandService;
-import com.akademicu.albums.service.serviceImpl.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +16,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final AlbumRepository albumRepository;
     private final BandServiceImpl bandService;
-    private final ServiceGenreImpl genreService;
+    private final GenreServiceImpl genreService;
     @Autowired
-    public AlbumServiceImpl(AlbumRepository albumRepository, BandServiceImpl bandService, ServiceGenreImpl genreService) {
+    public AlbumServiceImpl(AlbumRepository albumRepository, BandServiceImpl bandService, GenreServiceImpl genreService) {
         this.albumRepository = albumRepository;
         this.bandService = bandService;
         this.genreService = genreService;
@@ -42,22 +40,19 @@ public class AlbumServiceImpl implements AlbumService {
     public Album createAlbumInDb(AlbumDto albumDto) {
         Album album = new Album();
         album = mapToEntity(albumDto);
-       // System.out.println("\n"+album.toString());
-        Band band = bandService.getBandByName(albumDto.band());
-        album.setBand(band);
-        album.setGenreList(genreService.stringOfGenresToObject(albumDto.genres()));
-        //System.out.println(album.toString());
         albumRepository.save(album);
         return album;
     }
 
     private Album mapToEntity(AlbumDto albumDto){
-
-        //System.out.println("\n"+albumDto.toString());
         Album album = new Album();
         album.setName(albumDto.name());
         album.setReleaseYear(albumDto.releaseYear());
+        Band band = bandService.getBandByName(albumDto.band());
+        album.setBand(band);
+        album.setBandName(band.getName());
         album.setNrOfCopies(albumDto.nrOfCopies());
+        album.setGenreList(genreService.stringOfGenresToObject(albumDto.genres()));
         return album;
     }
 

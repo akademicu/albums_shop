@@ -21,6 +21,7 @@ public class Album {
     private int releaseYear;
     @Column(nullable = false)
     private int nrOfCopies;
+    private String bandName;
 
 
     @JsonIgnore
