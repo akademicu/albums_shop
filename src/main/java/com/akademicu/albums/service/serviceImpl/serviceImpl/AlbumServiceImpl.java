@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
@@ -31,12 +33,15 @@ public class AlbumServiceImpl implements AlbumService {
     }
     //get all albums
     @Override
-    public List<Album> getAllAlbums() {
+    public List<AlbumDto> getAllAlbums() {
         List<Album> albums = new ArrayList<>();
         albumRepository.findAll().forEach(albums::add);
-        System.out.println(albums.getFirst());
         if (albums.isEmpty())throw new RuntimeException("no albums in db");
-        return albums;
+        List<AlbumDto> albumDtoList = new ArrayList<>();
+        for (Album album: albums) {
+            albumDtoList.add(mapToDto(album));
+        }
+        return albumDtoList;
     }
     //Create album
     @Override
@@ -53,14 +58,14 @@ public class AlbumServiceImpl implements AlbumService {
     public Album getAlbumByName(String albumName) {
         Album album = new Album();
         album = albumRepository.findByName(albumName);
-        if (Objects.isNull(album)) throw new RuntimeException("No search album");
+        if (isNull(album)) throw new RuntimeException("No search album");
         return album;
     }
 
     @Override
     public List<Album> getAlbumsByGenre(String genreName) {
         Genre genre = genreService.genreByName(genreName);
-        if (Objects.isNull(genre)) throw new AlbumNotFoundExceptionClass("no such genre");
+        if (isNull(genre)) throw new AlbumNotFoundExceptionClass("no such genre");
         Long genreId = genre.getId();
         List<Album> albumList = new ArrayList<>();
         albumRepository.getAlbumsByGenre(genreId).forEach(albumList::add);
@@ -69,9 +74,14 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
+    public Album getAlbumById(Long id) {
+        return albumRepository.findById(id).orElseThrow(()->new AlbumNotFoundExceptionClass("album not found"));
+    }
+
+    @Override
     public List<Album> getAlbumByBandName(String bandName) {
         Band band = bandService.getBandByNameOnly(bandName);
-        if (Objects.isNull(band))throw new AlbumNotFoundExceptionClass("nu such band");
+        if (isNull(band))throw new AlbumNotFoundExceptionClass("nu such band");
         Long bandId = band.getId();
         List<Album> albumList = new ArrayList<>();
         albumRepository.getAlbumsByBand(bandId).forEach(albumList::add);
@@ -81,13 +91,31 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public void deleteAlbumByName(String albumName) {
         Album album = albumRepository.findByName(albumName);
-        if (Objects.isNull(album)) throw new AlbumNotFoundExceptionClass("album not found");
+        if (isNull(album)) throw new AlbumNotFoundExceptionClass("album not found");
         albumRepository.deleteById(album.getId());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        albumRepository.deleteById(id);
+    }
+
+    @Override
+    public void updatrAlbum(String albumName, AlbumDto albumDto) {
+        Album album = albumRepository.findByName(albumName);
+        Album newAlbum = mapToEntity(albumDto);
+        newAlbum.setId(album.getId());
+        //AlbumDto newAlbumDto = mapToDto(album);
+        albumRepository.save(newAlbum);
+
+
+
     }
 
     ///Helping functions
     private Album mapToEntity(AlbumDto albumDto){
         Album album = new Album();
+        album.setId(albumDto.id());
         album.setName(albumDto.name());
         album.setReleaseYear(albumDto.releaseYear());
         Band band = bandService.getBandByName(albumDto.band());
@@ -99,10 +127,10 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     private AlbumDto mapToDto(Album album){
-        String bandName = bandService.getBandById(album.getId()).getName();
+        //String bandName = bandService.getBandById(album.getId()).getName();
         String genres = genreService.genreNameToString(album.getGenreList());
         return new AlbumDto(
-                album.getName(), album.getReleaseYear(), album.getNrOfCopies(), bandName, genres
+             album.getId(), album.getName(), album.getReleaseYear(), album.getNrOfCopies(), album.getBandName(), genres
         );
     }
 }

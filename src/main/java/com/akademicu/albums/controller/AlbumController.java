@@ -24,13 +24,13 @@ public class AlbumController {
     }
 
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Album>> getAllAlbumsController(){
-        List<Album> albumList = albumService.getAllAlbums();
+    @GetMapping
+    public ResponseEntity<List<AlbumDto>> getAllAlbumsController(){
+        List<AlbumDto> albumList = albumService.getAllAlbums();
         return new ResponseEntity<>(albumList, HttpStatus.OK);
     }
 
-    @PostMapping("/album")
+    @PostMapping
     public ResponseEntity<Album> addAlbumController(@RequestBody AlbumDto albumDto){
         Album album = albumService.createAlbumInDb(albumDto);
         return new ResponseEntity<>(album, HttpStatus.CREATED);
@@ -59,6 +59,19 @@ public class AlbumController {
         Album album = albumService.getAlbumByName(albumName);
         albumService.deleteAlbumByName(albumName);
         return new ResponseEntity<>("The album "+albumName+" have been deleted", HttpStatus.OK);
+    }
+
+    @PutMapping("/album/{albumName}")
+    public ResponseEntity<Album> replaceAlbumByName(@RequestBody AlbumDto albumDto,@PathVariable String albumName){
+        Album album = albumService.getAlbumByName(albumName);
+        albumService.updatrAlbum(albumName, albumDto);
+        return new ResponseEntity<>(albumService.getAlbumById(album.getId()), HttpStatus.OK);
+    }
+
+    @DeleteMapping(params = "id")
+    public ResponseEntity<String> deleteById(@RequestParam Long id){
+        albumService.deleteById(id);
+        return new ResponseEntity<>("album have bin deleted", HttpStatus.OK);
     }
 
 }
